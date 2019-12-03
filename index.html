@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600" rel="stylesheet" type="text/css">
+  <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+  <link type="text/css" rel="stylesheet" href="style.css">
+  <title>Budgety</title>
+</head>
+<body>
+<div id="app">
+  <div class="top">
+    <div class="budget">
+      <div class="budget__title">
+        Budget disponible pour <span class="budget__title--month">{{ currentDate }}</span>:
+      </div>
+
+      <div class="budget__value">{{ budgetValue }}</div>
+
+      <div v-for="(type, label) in budget" :class="'budget__' + label + ' clearfix'">
+        <div :class="'budget__' + label + '--text'">
+          {{ label === 'income' ? 'Rentrées' : 'Dépenses'}}
+        </div>
+        <div class="right">
+          <div :class="'budget__' + label + '--value'">
+            {{ label === 'income' ? incomeValue : expensesValue }}
+          </div>
+          <div :class="'budget__' + label + '--percentage'">
+            {{ label === 'income' ? '&nbsp;' : percent(totalExpenses)}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="add">
+      <form class="add__container" @submit.prevent="handleForm">
+        <select class="add__type" v-model="currentType">
+          <option value="inc">+</option>
+          <option value="exp">-</option>
+        </select>
+        <input type="text" class="add__description" placeholder="Ajouter une description" v-model="currentDesc">
+        <input type="number" min="0" class="add__value" placeholder="Value" v-model="currentVal">
+        <button type="submit" class="add__btn"><i class="ion-ios-checkmark-outline"></i></button>
+      </form>
+    </div>
+
+    <div class="container clearfix">
+      <div v-for="(type, label) in budget" :class="label">
+        <h2 :class="label + '__title'">{{ label === 'income' ? 'Rentrées' : 'Dépenses'}}</h2>
+
+        <div :class="label + '__list'">
+
+          <div v-for="(item, index) in type" class="item clearfix" :id="label + '-' + index">
+            <div class="item__description">{{ item.desc }}</div>
+            <div class="right clearfix">
+              <div class="item__value">{{ formatValue(item.value) }}</div>
+              <div v-if="label === 'expenses'" class="item__percentage">{{ percent(item.value) }}</div>
+              <div class="item__delete">
+                <button class="item__delete--btn">
+                  <i class="ion-ios-close-outline"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="dist/main.js"></script>
+</body>
+</html>
