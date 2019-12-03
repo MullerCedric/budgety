@@ -36,12 +36,12 @@
   <div class="bottom">
     <div class="add">
       <form class="add__container" @submit.prevent="handleForm">
-        <select class="add__type" v-model="currentType">
+        <select class="add__type" v-model="currentEntry.type">
           <option value="inc">+</option>
           <option value="exp">-</option>
         </select>
-        <input type="text" class="add__description" placeholder="Ajouter une description" v-model="currentDesc">
-        <input type="number" min="0" class="add__value" placeholder="Value" v-model="currentVal">
+        <input type="text" class="add__description" placeholder="Ajouter une description" v-model="currentEntry.desc">
+        <input type="number" min="0" class="add__value" placeholder="Value" v-model="currentEntry.val">
         <button type="submit" class="add__btn"><i class="ion-ios-checkmark-outline"></i></button>
       </form>
     </div>
@@ -58,7 +58,7 @@
               <div class="item__value">{{ formatValue(item.value) }}</div>
               <div v-if="label === 'expenses'" class="item__percentage">{{ percent(item.value) }}</div>
               <div class="item__delete">
-                <button class="item__delete--btn">
+                <button class="item__delete--btn" @click="deleteEntry(label, index)">
                   <i class="ion-ios-close-outline"></i>
                 </button>
               </div>

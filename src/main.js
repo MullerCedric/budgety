@@ -7,9 +7,11 @@ new Vue({
             income: [],
             expenses: [],
         },
-        currentType: 'inc',
-        currentDesc: '',
-        currentVal: '',
+        currentEntry: {
+            type: 'inc',
+            desc: '',
+            val: '',
+        },
     },
     computed: {
         budgetValue() {
@@ -47,26 +49,31 @@ new Vue({
         },
         total(key) {
             return this.budget[key].reduce(function (a, b) {
-                return +a + +b.value;
+                return a + b.value;
             }, 0);
         },
         percent(val) {
-            if (this.totalBudget == 0) return '0%';
-            return Math.floor((val / this.totalBudget) * 100) + '%';
+            if (this.totalIncome == 0) return '0%';
+            return Math.floor((Math.abs(val) / this.totalIncome) * 100) + '%';
         },
         resetData() {
-            this.currentType = 'inc';
-            this.currentDesc = '';
-            this.currentVal = '';
+            this.currentEntry.type = 'inc';
+            this.currentEntry.desc = '';
+            this.currentEntry.val = '';
         },
         handleForm() {
-            if (!this.currentVal) return;
-            let key = this.currentType === 'inc' ? 'income' : 'expenses';
+            if (!this.currentEntry.val) return;
+            let key = this.currentEntry.type === 'inc' ? 'income' : 'expenses';
             this.budget[key].push({
-                desc: this.currentDesc,
-                value: this.currentType === 'inc' ? parseInt(this.currentVal) : -parseInt(this.currentVal),
+                desc: this.currentEntry.desc,
+                value: this.currentEntry.type === 'inc' ?
+                    Math.abs(parseInt(this.currentEntry.val)) :
+                    -Math.abs(parseInt(this.currentEntry.val)),
             });
             this.resetData();
+        },
+        deleteEntry(label, index) {
+            this.budget[label].splice(index, 1);
         }
     }
 });
