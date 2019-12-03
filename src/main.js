@@ -67,8 +67,8 @@ new Vue({
             this.budget[key].push({
                 desc: this.currentEntry.desc,
                 value: this.currentEntry.type === 'inc' ?
-                    Math.abs(parseInt(this.currentEntry.val)) :
-                    -Math.abs(parseInt(this.currentEntry.val)),
+                    Math.abs(parseFloat(this.currentEntry.val)) :
+                    -Math.abs(parseFloat(this.currentEntry.val)),
             });
             this.resetData();
         },
